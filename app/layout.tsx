@@ -2,6 +2,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import Header from './components/Header'
+import MapView from './components/MapView'
 
 
 
@@ -23,7 +24,14 @@ export default function RootLayout({
       <body className={`${inter.className} h-full`}>
         <div className="flex flex-col h-screen">
           <Header />
-          
+          <div className="flex flex-1 overflow-hidden">
+            <main className="flex-1 relative">
+              <MapView />
+              {children}
+            </main>
+            
+          </div>
+
         </div>
       </body>
     </html>
