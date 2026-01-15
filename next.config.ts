@@ -1,7 +1,11 @@
-import type { NextConfig } from "next";
+// next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  images: {
+    domains: ['cdn.sanity.io', 'images.unsplash.com'],
+  },
+}
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+module.exports = nextConfig
