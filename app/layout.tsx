@@ -3,6 +3,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Header from './components/Header'
 import MapView from './components/MapView'
+import Sidebar from './components/Sidebar'
 
 
 
@@ -29,7 +30,7 @@ export default function RootLayout({
               <MapView />
               {children}
             </main>
-            
+            <Sidebar />
           </div>
 
         </div>

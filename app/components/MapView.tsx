@@ -50,7 +50,6 @@ interface MapViewProps {
 export default function MapView({ onPropertyClick }: MapViewProps) {
   const [properties, setProperties] = useState<any[]>([])
   const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | 'light'>('street')
-  const [selectedProperty, setSelectedProperty] = useState<any | null>(null)
 
     
 
@@ -78,13 +77,7 @@ export default function MapView({ onPropertyClick }: MapViewProps) {
       >
         <TileLayer
           url={getTileLayer()}
-          attribution={
-            mapStyle === 'street' 
-              ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              : mapStyle === 'satellite'
-              ? 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-              : '&copy; <a href="https://carto.com/">CARTO</a>'
-          }
+          
         />
         
         
