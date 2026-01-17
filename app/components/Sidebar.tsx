@@ -17,7 +17,8 @@ const properties = [
     sqft: 1200,
     image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400",
     yearBuilt: 2015,
-    lotSize: "0.12 acres"
+    lotSize: "0.12 acres",
+    listingType: "forSale"
   },
   {
     id: 2,
@@ -28,7 +29,8 @@ const properties = [
     sqft: 850,
     image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w-400",
     yearBuilt: 2008,
-    lotSize: "0.08 acres"
+    lotSize: "0.08 acres",
+    listingType: "forSale"
   },
   {
     id: 3,
@@ -39,7 +41,8 @@ const properties = [
     sqft: 2100,
     image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=400",
     yearBuilt: 2020,
-    lotSize: "0.25 acres"
+    lotSize: "0.25 acres",
+    listingType: "forRent"
   }
 ]
 

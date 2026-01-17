@@ -6,6 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 're
 import { ZoomIn, ZoomOut, Navigation, Home } from 'lucide-react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import Dropdown_onMap from './Dropdown_onMap'
 
 // Remove marker icon configuration since we're using circles
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -60,7 +61,7 @@ const mockProperties = [
     bathrooms: 3,
     squareFeet: 2100,
     propertyType: 'house',
-    listingType: 'forSale',
+    listingType: 'forRent',
     description: 'Luxury house with amazing views',
     location: { lat: 49.2288, lng: -123.1035 },
   }
@@ -95,7 +96,9 @@ function MapControls() {
         <Navigation className="h-5 w-5" />
       </button>
     </div>
+
   )
+  
 }
 
 // Custom Circle Marker with ID
@@ -339,24 +342,13 @@ export default function MapView({ onPropertyClick }: MapViewProps) {
           )
         })}
 
+    <div className="absolute left-20 top-4 z-[1000] flex flex-col space-y-2">
+      <Dropdown_onMap/>
+    </div>
         <MapControls />
       </MapContainer>
 
-      {/* Map Controls */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex bg-white rounded-lg shadow-lg overflow-hidden">
-        {['forSale', 'forRent', 'sold'].map((mode, index) => (
-          <button
-            key={mode}
-            className={`px-4 py-2 hover:bg-gray-50 transition text-sm ${
-              index === 0 ? 'rounded-l-lg' : 
-              index === 2 ? 'rounded-r-lg' : ''
-            } ${mode === 'forSale' ? 'bg-blue-600 text-white' : ''}`}
-          >
-            {mode === 'forSale' ? 'For Sale' :
-             mode === 'forRent' ? 'For Rent' : 'Sold'}
-          </button>
-        ))}
-      </div>
+     
 
       {/* Map Style Selector */}
       <div className="absolute left-4 bottom-4 flex bg-white rounded-lg shadow-lg overflow-hidden">
