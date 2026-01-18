@@ -16,6 +16,8 @@ interface PropertyCardProps {
     image: string
     yearBuilt: number
     lotSize: string
+    listingType: string
+
   }
 }
 
@@ -48,10 +50,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             <span>{property.baths} baths</span>
             .
           </div>
-          <div className="flex items-center">
-            
-            <span>{property.sqft.toLocaleString()} sqft</span>
-          </div>
+          
         </div>
         
         <div className="flex items-center justify-between text-sm text-gray-500">

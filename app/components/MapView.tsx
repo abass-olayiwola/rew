@@ -2,19 +2,47 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet'
+//import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet'
 import { ZoomIn, ZoomOut, Navigation, Home } from 'lucide-react'
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+//import 'leaflet/dist/leaflet.css'
 import Dropdown_onMap from './Dropdown_onMap'
+import MapControls from './MapControls'
+import dynamic from 'next/dynamic'
 
-// Remove marker icon configuration since we're using circles
-delete (L.Icon.Default.prototype as any)._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '/leaflet/images/marker-icon-2x.png',
-  iconUrl: '/leaflet/images/marker-icon.png',
-  shadowUrl: '/leaflet/images/marker-shadow.png',
-})
+// Dynamic imports for Leaflet (client-side only)
+const MapContainer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.MapContainer),
+  { ssr: false }
+)
+const TileLayer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.TileLayer),
+  { ssr: false }
+)
+
+const CircleMarker = dynamic(
+  () => import('react-leaflet').then((mod) => mod.CircleMarker),
+  { ssr: false }
+)
+const Marker = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Marker),
+  { ssr: false }
+)
+const Popup = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Popup),
+  { ssr: false }
+)
+
+
+
+
+interface MapViewProps {
+  listingType: string
+  onListingTypeChange?: (type: string) => void
+  onPropertyClick?: (property: any) => void
+}
+
+
 
 // Static data 
 const mockProperties = [
@@ -69,37 +97,6 @@ const mockProperties = [
 
 const VANCOUVER_COORDS = [49.2827, -123.1207] as [number, number]
 
-function MapControls() {
-  const map = useMap()
-
-  return (
-    <div className="absolute right-4 top-4 z-[1000] flex flex-col space-y-2">
-      <button
-        onClick={() => map.zoomIn()}
-        className="bg-white p-2 rounded-lg shadow-lg hover:bg-gray-50 transition"
-        aria-label="Zoom in"
-      >
-        <ZoomIn className="h-5 w-5" />
-      </button>
-      <button
-        onClick={() => map.zoomOut()}
-        className="bg-white p-2 rounded-lg shadow-lg hover:bg-gray-50 transition"
-        aria-label="Zoom out"
-      >
-        <ZoomOut className="h-5 w-5" />
-      </button>
-      <button
-        onClick={() => map.locate()}
-        className="bg-white p-2 rounded-lg shadow-lg hover:bg-gray-50 transition"
-        aria-label="Locate me"
-      >
-        <Navigation className="h-5 w-5" />
-      </button>
-    </div>
-
-  )
-  
-}
 
 // Custom Circle Marker with ID
 interface CustomCircleMarkerProps {
@@ -207,7 +204,7 @@ function CustomCircleMarker({ property, onPropertyClick }: CustomCircleMarkerPro
         radius={getRadius()}
         pathOptions={{
           ...circleStyle,
-          fillOpacity: 0 // Make it transparent since we're using the div icon for visuals
+          fillOpacity: 0 
         }}
         eventHandlers={{
           
@@ -223,11 +220,13 @@ interface MapViewProps {
   onPropertyClick?: (property: any) => void
 }
 
-export default function MapView({ onPropertyClick }: MapViewProps) {
+export default function MapView({ listingType = 'forSale', onListingTypeChange, onPropertyClick }: MapViewProps) {
   const [isClient, setIsClient] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const [properties, setProperties] = useState<any[]>([])
   const [mapStyle, setMapStyle] = useState<'street' | 'satellite' | 'light'>('street')
   const [selectedProperty, setSelectedProperty] = useState<any | null>(null)
+
 
   useEffect(() => {
     setIsClient(true)
@@ -239,6 +238,23 @@ export default function MapView({ onPropertyClick }: MapViewProps) {
     setSelectedProperty(property)
     
   }
+
+  // Filter properties based on listing type
+  const filteredProperties = mockProperties.filter(
+    property => property.listingType === listingType
+  )
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  const handleListingTypeChange = (type: string) => {
+    // Call the parent's handler to update the state
+    if (onListingTypeChange) {
+      onListingTypeChange(type)
+    }
+  }
+
 
   const getTileLayer = () => {
     switch (mapStyle) {
@@ -342,11 +358,18 @@ export default function MapView({ onPropertyClick }: MapViewProps) {
           )
         })}
 
-    <div className="absolute left-20 top-4 z-[1000] flex flex-col space-y-2">
-      <Dropdown_onMap/>
-    </div>
         <MapControls />
       </MapContainer>
+
+      {/* Listing Type Dropdown */}
+    <div className="absolute left-20 top-4 z-[1000] flex flex-col space-y-2">
+          
+            <Dropdown_onMap 
+              currentType={listingType}
+              onTypeChange={handleListingTypeChange}
+            />
+          
+        </div>
 
      
 
